@@ -1,17 +1,20 @@
 const add = function (numOne, numTwo) {
-    return numOne + numTwo;
+    return +numOne + +numTwo;
 };
 
 const subtract = function (numOne, numTwo) {
-    return numOne - numTwo;
+    return +numOne - +numTwo;
 };
 
 const multiply = function (numOne, numTwo) {
-    return numOne * numTwo;
+    return +numOne * +numTwo;
 };
 
 const divide = function (numOne, numTwo) {
-    return numOne / numTwo;
+    if (+numTwo === 0) {
+        return "ERROR!";
+    }  
+    return +numOne / +numTwo;
 };
 
 let numOne = "",
@@ -22,13 +25,13 @@ let numOne = "",
 const operate = function (numOne, operator, numTwo) {
     switch (operator) {
         case "+":
-            return add(numOne, numTwo);
+            return Math.round(add(numOne, numTwo) * 100) / 100;
         case "-":
-            return subtract(numOne, numTwo);
+            return Math.round(subtract(numOne, numTwo) * 100) / 100;
         case "*":
-            return multiply(numOne, numTwo);
+            return Math.round(multiply(numOne, numTwo) * 100) / 100;
         case "/":
-            return divide(numOne, numTwo);
+            return Math.round(divide(numOne, numTwo) * 100) / 100;
     }
 }
 
@@ -43,7 +46,12 @@ num.forEach(num => {
         if (lastOperator !== "") {
             numTwo += num.textContent;
         } else {
+            if (display.textContent == `${result}`) {
+                numOne = "";
+                numOne += num.textContent;
+            } else {
             numOne += num.textContent;
+            }
         }
     })
 });
@@ -51,11 +59,19 @@ num.forEach(num => {
 const op = document.querySelectorAll(".operator")
 op.forEach(op => {
     op.addEventListener("click", () => {
+        operator.push(op.textContent)
+        lastOperator = operator[operator.length - 1]
+        let penultimate = operator[operator.length - 2]
         if (numOne === "") {
             return;
         }
-        operator.push(op.textContent)
-        lastOperator = operator[operator.length - 1]
+         if (numTwo != "" && numTwo != ".") {
+            result = operate(numOne, penultimate, numTwo);
+            numOne = `${result}`,
+            numTwo = "";
+        }
+        
+       
     })
 })
 
@@ -105,9 +121,21 @@ sign.addEventListener("click", () => {
     }
 })
 
+let result;
+const equal = document.querySelector(".equal")
+
 buttons.forEach(buttons => {
-    buttons.addEventListener("click", () => {
-        display.textContent = `${numOne} ${lastOperator} ${numTwo}`
+    buttons.addEventListener("click", (e) => {
+        if(e.target.className === "equal" && numOne != "" && numTwo != "") {
+            result = operate(numOne, lastOperator, numTwo);
+            display.textContent = `${result}`;
+            numOne = `${result}`,
+            numTwo = "",
+            lastOperator = "",
+            operator = [];
+        } else {
+        display.textContent = `${numOne} ${lastOperator} ${numTwo}`;
+        }
     })
 })
 
