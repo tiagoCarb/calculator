@@ -13,7 +13,7 @@ const multiply = function (numOne, numTwo) {
 const divide = function (numOne, numTwo) {
     if (+numTwo === 0) {
         return "ERROR!";
-    }  
+    }
     return +numOne / +numTwo;
 };
 
@@ -50,7 +50,7 @@ num.forEach(num => {
                 numOne = "";
                 numOne += num.textContent;
             } else {
-            numOne += num.textContent;
+                numOne += num.textContent;
             }
         }
     })
@@ -59,19 +59,17 @@ num.forEach(num => {
 const op = document.querySelectorAll(".operator")
 op.forEach(op => {
     op.addEventListener("click", () => {
-        operator.push(op.textContent)
-        lastOperator = operator[operator.length - 1]
-        let penultimate = operator[operator.length - 2]
         if (numOne === "") {
             return;
         }
-         if (numTwo != "" && numTwo != ".") {
+        operator.push(op.textContent)
+        lastOperator = operator[operator.length - 1]
+        let penultimate = operator[operator.length - 2]
+        if (numTwo != "" && numTwo != ".") {
             result = operate(numOne, penultimate, numTwo);
             numOne = `${result}`,
-            numTwo = "";
+                numTwo = "";
         }
-        
-       
     })
 })
 
@@ -97,16 +95,21 @@ ac.addEventListener("click", () => {
     numOne = "";
     numTwo = "";
     operator = [];
-    lastOperator = ""
-    display.textContent = ""
+    lastOperator = "";
+    display.textContent = "";
 })
 
 const del = document.querySelector(".del")
 del.addEventListener("click", () => {
     if (operator[0] === undefined) {
         numOne = numOne.slice(0, -1);
-    } else {
-        numTwo = numTwo.slice(0, -1);
+    } else if (operator[0] != undefined) {
+        if (numTwo === "") {
+            operator = [],
+                lastOperator = "";
+        } else {
+            numTwo = numTwo.slice(0, -1);
+        }
     }
 })
 
@@ -124,17 +127,130 @@ sign.addEventListener("click", () => {
 let result;
 const equal = document.querySelector(".equal")
 
+document.addEventListener("keydown", function (event) {
+    const key = event.key;
+
+    if (/[0-9]/.test(key)) {
+        if (operator[0] === undefined) {
+            numOne += `${key}`
+            display.textContent = `${numOne} `
+        } else {
+            numTwo += `${key}`
+            display.textContent += ` ${numTwo}`
+        }
+    }
+    switch (key) {
+        case "+":
+            if (numOne === "") {
+                break;
+            }
+            operator.push(key)
+            lastOperator = operator[operator.length - 1]
+            penultimate = operator[operator.length - 2]
+            if (numTwo != "" && numTwo != ".") {
+                result = operate(numOne, penultimate, numTwo);
+                numOne = `${result}`,
+                    numTwo = "";
+                display.textContent = `${numOne} ${lastOperator}`
+            } else {
+                display.textContent += `${lastOperator}`
+            }
+            break;
+        case "-":
+            if (numOne === "") {
+                break;
+            }
+            operator.push(key)
+            lastOperator = operator[operator.length - 1]
+            penultimate = operator[operator.length - 2]
+            if (numTwo != "" && numTwo != ".") {
+                result = operate(numOne, penultimate, numTwo);
+                numOne = `${result}`,
+                    numTwo = "";
+                display.textContent = `${numOne} ${lastOperator}`
+            } else {
+                display.textContent += `${lastOperator}`
+            }
+            break;
+        case "*":
+            if (numOne === "") {
+                break;
+            }
+            operator.push(key)
+            lastOperator = operator[operator.length - 1]
+            penultimate = operator[operator.length - 2]
+            if (numTwo != "" && numTwo != ".") {
+                result = operate(numOne, penultimate, numTwo);
+                numOne = `${result}`,
+                    numTwo = "";
+                display.textContent = `${numOne} ${lastOperator}`
+            } else {
+                display.textContent += `${lastOperator}`
+            }
+            break;
+        case "/":
+            if (numOne === "") {
+                break;
+            }
+            operator.push(key)
+            lastOperator = operator[operator.length - 1]
+            penultimate = operator[operator.length - 2]
+            if (numTwo != "" && numTwo != ".") {
+                result = operate(numOne, penultimate, numTwo);
+                numOne = `${result}`,
+                    numTwo = "";
+                display.textContent = `${numOne} ${lastOperator}`
+            } else {
+                display.textContent += `${lastOperator}`
+            }
+            break;
+    }
+    if (key === "Enter" || key === "=") {
+        if (numOne != "" && numTwo != "" && numOne != "." && numTwo != ".") {
+            result = operate(numOne, lastOperator, numTwo);
+            display.textContent = `${result} `;
+            numOne = `${result}`,
+                numTwo = "",
+                lastOperator = "",
+                operator = [];
+        }
+    }
+    else if (key === "c" || key === "C") {
+        numOne = "";
+        numTwo = "";
+        operator = [];
+        lastOperator = "";
+        display.textContent = "";
+    }
+    else if (key === "Backspace") {
+        if (operator[0] === undefined) {
+            numOne = numOne.slice(0, -1);
+            display.textContent = `${numOne} ${lastOperator} ${numTwo}`;
+        } else if (operator[0] != undefined) {
+            if (numTwo === "") {
+                operator = [],
+                lastOperator = "";
+                display.textContent = `${numOne} ${lastOperator} ${numTwo}`;
+            } else {
+                numTwo = numTwo.slice(0, -1);
+                display.textContent = `${numOne} ${lastOperator} ${numTwo}`;
+            }
+        }
+    }
+
+})
+
 buttons.forEach(buttons => {
     buttons.addEventListener("click", (e) => {
-        if(e.target.className === "equal" && numOne != "" && numTwo != "") {
+        if (e.target.className === "equal" && numOne != "" && numTwo != "" && numOne != "." && numTwo != ".") {
             result = operate(numOne, lastOperator, numTwo);
             display.textContent = `${result}`;
             numOne = `${result}`,
-            numTwo = "",
-            lastOperator = "",
-            operator = [];
+                numTwo = "",
+                lastOperator = "",
+                operator = [];
         } else {
-        display.textContent = `${numOne} ${lastOperator} ${numTwo}`;
+            display.textContent = `${numOne} ${lastOperator} ${numTwo}`;
         }
     })
 })
