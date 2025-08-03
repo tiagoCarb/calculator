@@ -1,0 +1,36 @@
+.calculator {
+    border: solid brown;
+    border-radius: 10px;
+    padding: 10px;
+    height: 500px;
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.display {
+    background-color: gray;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: end;
+}
+
+button {
+   width: 82px;
+   font-size: large;
+   
+}
+
+.first-line, .sec-line, .third-line, .fourty-line, .fifth-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    flex-grow: 1;
+    gap: 5px;
+}
+
+.equal {
+    flex-grow: 1;
+}
